@@ -34,7 +34,7 @@ class Ximia(tk.Frame):
             text.grid(row=i, column=1)
             text.insert(tk.INSERT, str(compound[i].molecular_weight) + '\n')
             text.grid(row=i, column=2) 
-
+            
 root = tk.Tk()
 root.title("XIMIA")
 root.geometry("750x150")
@@ -44,7 +44,7 @@ search_box = tk.Entry(root, width=30)
 search_box.grid(row=0, column=0, columnspan=2, padx=100, pady=15)
 search_box.config(font=("Galaxy BT", 24))
 search_button = tk.Button(root, text="Search", command=Ximia.search)
-search_button.config(fg="cyan", font=("Galaxy BT", 24))
+search_button.config(fg="#b6d6fd", font=("Galaxy BT", 24))
 search_button.grid(row=1, column=0, columnspan=2, padx=100, pady=15)
 root.bind("<Return>", Ximia.search)
 
