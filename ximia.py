@@ -21,8 +21,7 @@ class Ximia(tk.Frame):
         except Exception as e:
             cs = "Error..."   
         search_item = str(search_box.get())
-        print(search_item)
-        
+        print(search_item)   
         compound = cs.search(search_item) 
         print(compound)
         text = tk.Text(search_results)
@@ -34,15 +33,16 @@ class Ximia(tk.Frame):
             text.grid(row=i, column=1)
             text.insert(tk.INSERT, str(compound[i].molecular_weight) + '\n')
             text.grid(row=i, column=2) 
-            
+
 root = tk.Tk()
 root.title("XIMIA")
-root.geometry("750x150")
+root.geometry("700x150")
 root.resizable(width=0, height=0)
+root.iconphoto(True, tk.PhotoImage(file='./icon.png'))
 root.config(bg="#b6d6fd")
 search_box = tk.Entry(root, width=30)
 search_box.grid(row=0, column=0, columnspan=2, padx=100, pady=15)
-search_box.config(font=("Galaxy BT", 24))
+search_box.config(font=("Times New Roman", 24))
 search_button = tk.Button(root, text="Search", command=Ximia.search)
 search_button.config(fg="#b6d6fd", font=("Galaxy BT", 24))
 search_button.grid(row=1, column=0, columnspan=2, padx=100, pady=15)
