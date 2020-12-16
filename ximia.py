@@ -10,13 +10,12 @@ api_key = os.environ.get('CHEMSPI_API_KEY')
 class Ximia(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
-        self.master = master
-     
+        self.master = master   
 
     def search(event=None):
         search_results = tk.Tk()
         search_results.title('XIMIA - Search results')
-        search_results.resizable(width=0, height=0)
+        search_results.resizable(width=0, height=0)  
         try:       
             cs = ChemSpider(api_key)
         except Exception as e:
@@ -24,11 +23,17 @@ class Ximia(tk.Frame):
         search_item = str(search_box.get())
         global compound
         compound = cs.search(search_item) 
-        text = tk.Text(search_results)
-        for i in range(len(compound)):
-            result_button = tk.Button(search_results, text=str(compound[i].common_name))
-            result_button.config(fg="black", font=("Galaxy BT", 24))
-            result_button.grid(row=i, column=0, columnspan=2) 
+
+        if len(compound)>10:
+            for i in range(len(compound)):
+                result_button = tk.Button(search_results, text=str(compound[i].common_name))
+                result_button.config(fg="black", font=("Galaxy BT", 24))
+                result_button.grid(row=i, column=0, columnspan=2) 
+        else:
+            for i in range(len(compound)):
+                result_button = tk.Button(search_results, text=str(compound[i].common_name))
+                result_button.config(fg="black", font=("Galaxy BT", 24))
+                result_button.grid(row=i, column=0, columnspan=2) 
 
 root = tk.Tk()
 root.title("XIMIA")
