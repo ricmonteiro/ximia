@@ -5,7 +5,6 @@ import requests
 from chemspipy import ChemSpider
 import pubchempy as pch
 import os
-import pandas
 
 # Ximia class, the heart of the application with __init__ and the search function
 
@@ -16,23 +15,30 @@ class Ximia(tk.Frame):
          
 
     def search(self=None, event=None):
+
+        #ChemSpider API search
         api_key = os.environ.get("CHEMSPI_API_KEY") 
         try:       
             cs = ChemSpider(api_key)
         except Exception:
             cs = "Error..."   
         search_item = str(search_box.get())
-        global compound
-        result_pch = pch.get_compounds(search_item, "name", record_type="3d")
-        print(result_pch)
+        global compound_name
         for compound in cs.search(search_item):
             compound_name = str(compound.common_name) 
-            result_list = tk.Listbox(root, width=15, height=len(result))
-            result_list.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky='w'+'e'+'n'+'s')        
-            result_list.insert(tk.END, str(result_pch[0].iupac_name))
-            
-            
+        
+        #PubChem API search
+        result_pch = pch.get_compounds(search_item, "name", record_type="3d")
+        print(result_pch)
+        #results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:9]
+        #print(results_from_pubchem)
+
+        #result_list = tk.Listbox(root, width=15, height=len(results_from_pubchem))
+        #result_list.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky='w'+'e'+'n'+'s')
+        #for item in results_from_pubchem:
+        #    result_list.insert(tk.END, item)
               
+
 # MAIN WINDOW
 
     # Main window options
@@ -91,6 +97,3 @@ ximia = Ximia(master=root)
 
 ###tests
 root.mainloop()
-
-
-
