@@ -13,31 +13,50 @@ class Ximia(tk.Frame):
         super().__init__(master)
         self.master = master   
          
-
     def search(self=None, event=None):
-
+        search_frame = tk.Frame(root)
+        sb_y = tk.Scrollbar(search_frame, orient="vertical")
+        result_list = tk.Listbox(search_frame, font=("Times New Roman", 20), height=15)
+        result_list.config(yscrollcommand=sb_y.set) 
+        sb_y.config(command=result_list.yview)
+        search_frame.config()
+        
+               
         #ChemSpider API search
         api_key = os.environ.get("CHEMSPI_API_KEY") 
         try:       
             cs = ChemSpider(api_key)
         except Exception:
-            cs = "Error..."   
+            print("Error...")   
         search_item = str(search_box.get())
         global compound_name
         for compound in cs.search(search_item):
             compound_name = str(compound.common_name) 
         
         #PubChem API search
-        result_pch = pch.get_compounds(search_item, "name", record_type="3d")
+        result_pch = pch.get_cids(search_item, "name", record_type="3d")
         print(result_pch)
-        #results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:9]
-        #print(results_from_pubchem)
-
-        result_list = tk.Listbox(root, width=15, height=len(results_from_pubchem))
-        result_list.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky='w'+'e'+'n'+'s')
+        results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:20]
+        print(results_from_pubchem)
         for item in results_from_pubchem:
-            result_list.insert(tk.END, item)
-              
+            result_list.insert(tk.END,item)
+
+        try:
+            for item in compound_name:
+                result_list.insert(tk.END, item)
+        except Exception:
+            print("No results were obtained from the ChemSpider APi")
+
+        search_frame.grid(padx=10)
+        result_list.grid()
+        sb_y.grid(row=2, column=1, sticky="nse")
+        
+        
+
+    def choose_result():
+                  pass
+
+
 
 # MAIN WINDOW
 
@@ -59,7 +78,7 @@ root.config(bg="#b6d6fd") #Background color
 
 search_box = tk.Entry(root, width=30) # Create entrytext box for search
 search_box.config(fg="black", font=("Galaxy BT", 24)) # Font color black, style and size
-search_box.grid(row=0, column=1, columnspan=3, padx=10, pady=10) # Show search box
+search_box.grid(row=0, column=0, columnspan=3, padx=10, pady=10) # Show search box
 print("search box created")
 
     # Check boxes for search type 
