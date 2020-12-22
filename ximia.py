@@ -15,13 +15,12 @@ class Ximia(tk.Frame):
          
     def search(self=None, event=None):
         search_frame = tk.Frame(root)
-        sb_y = tk.Scrollbar(search_frame, orient="vertical")
         result_list = tk.Listbox(search_frame, font=("Times New Roman", 20), height=15)
+        sb_y = tk.Scrollbar(search_frame, orient="vertical")
         result_list.config(yscrollcommand=sb_y.set) 
         sb_y.config(command=result_list.yview)
-        search_frame.config()
-        
-               
+        search_frame.config(bg="#b6d6fd")
+                       
         #ChemSpider API search
         api_key = os.environ.get("CHEMSPI_API_KEY") 
         try:       
@@ -47,9 +46,13 @@ class Ximia(tk.Frame):
         except Exception:
             print("No results were obtained from the ChemSpider APi")
 
+
+        search_label = tk.Label(search_frame, text="Search results")
+        search_label.config(bg="#b6d6fd")
+        search_label.grid()
         search_frame.grid(padx=10)
-        result_list.grid()
-        sb_y.grid(row=2, column=1, sticky="nse")
+        result_list.grid(pady=10)
+        sb_y.grid(row=1, column=5, sticky='nse', pady=10)
         
         
 
