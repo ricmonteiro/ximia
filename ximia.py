@@ -50,8 +50,8 @@ class Ximia(tk.Frame):
         search_label = tk.Label(search_frame, text="Search results", font=("Helvetica", 18))
         search_label.config(bg="#b6d6fd")
         search_label.grid()
-        search_frame.grid(padx=10)
-        result_list.grid(pady=10)
+        search_frame.grid(row=2, padx=10)
+        result_list.grid(row=1, pady=10)
         sb_y.grid(row=1, column=5, sticky='nse', pady=10)
         
         
