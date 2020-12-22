@@ -47,7 +47,7 @@ class Ximia(tk.Frame):
             print("No results were obtained from the ChemSpider APi")
 
 
-        search_label = tk.Label(search_frame, text="Search results")
+        search_label = tk.Label(search_frame, text="Search results", font=("Helvetica", 18))
         search_label.config(bg="#b6d6fd")
         search_label.grid()
         search_frame.grid(padx=10)
@@ -55,7 +55,6 @@ class Ximia(tk.Frame):
         sb_y.grid(row=1, column=5, sticky='nse', pady=10)
         
         
-
     def choose_result():
                   pass
 
