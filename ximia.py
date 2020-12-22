@@ -33,10 +33,10 @@ class Ximia(tk.Frame):
         #results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:9]
         #print(results_from_pubchem)
 
-        #result_list = tk.Listbox(root, width=15, height=len(results_from_pubchem))
-        #result_list.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky='w'+'e'+'n'+'s')
-        #for item in results_from_pubchem:
-        #    result_list.insert(tk.END, item)
+        result_list = tk.Listbox(root, width=15, height=len(results_from_pubchem))
+        result_list.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky='w'+'e'+'n'+'s')
+        for item in results_from_pubchem:
+            result_list.insert(tk.END, item)
               
 
 # MAIN WINDOW
@@ -80,9 +80,7 @@ check_box_2.deselect()
 
 print("checkbox 2 created")
 
-
 root.bind("<Return>", Ximia.search) # Bind ENTER key to search function
-
 
 print("Enter key bind implemented")
 
