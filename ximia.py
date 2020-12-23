@@ -14,6 +14,8 @@ class Ximia(tk.Frame):
         self.master = master   
          
     def search(self=None, event=None):
+
+
         search_frame = tk.Frame(root)
         result_list = tk.Listbox(search_frame, font=("Times New Roman", 20), height=15)
         sb_y = tk.Scrollbar(search_frame, orient="vertical")
@@ -46,21 +48,22 @@ class Ximia(tk.Frame):
         except Exception:
             print("No results were obtained from the ChemSpider APi")
 
-
         search_label = tk.Label(search_frame, text="Search results", font=("Helvetica", 18))
         search_label.config(bg="#b6d6fd")
         search_label.grid()
-        search_frame.grid(row=2, padx=10)
-        result_list.grid(row=1, pady=10)
-        sb_y.grid(row=1, column=5, sticky='nse', pady=10)
-        
+        search_frame.grid(row=2, column=0, padx=10, sticky='nsw')
+        result_list.grid(row=1, column=0, pady=10, sticky='nsw')
+        sb_y.grid(row=1, column=4, sticky='nse', pady=10) 
+        print(result_list.curselection())
+        testlabel = tk.Label(root)
+        testlabel.grid(row=2, column=2)
+
+
         
     def choose_result():
                   pass
-
-
-
-# MAIN WINDOW
+                
+    # MAIN WINDOW
 
     # Main window options
 
@@ -75,31 +78,12 @@ root.config(bg="#b6d6fd") #Background color
 #logo = ImageTk.PhotoImage(Image.open()
 #logo.grid(row=0, column=0)
 
-
     # Search box
 
-search_box = tk.Entry(root, width=30) # Create entrytext box for search
+search_box = tk.Entry(root, width=40) # Create entrytext box for search
 search_box.config(fg="black", font=("Galaxy BT", 24)) # Font color black, style and size
 search_box.grid(row=0, column=0, columnspan=3, padx=10, pady=10) # Show search box
 print("search box created")
-
-    # Check boxes for search type 
-
-chems_search_var = tk.StringVar() 
-check_box_1 = tk.Checkbutton(root, text="Search ChemSpider", variable=chems_search_var,activebackground="#b6d6fd")
-check_box_1.grid(row=0, column=5)
-check_box_1.config(bg="#b6d6fd")
-check_box_1.deselect()
-
-print("checkbox 1 created")
-
-pubchem_search_var = tk.StringVar() 
-check_box_2 = tk.Checkbutton(root, text="Search PubChem", variable=pubchem_search_var, activebackground="#b6d6fd")
-check_box_2.grid(row=0, column=6,padx=10)
-check_box_2.config(bg="#b6d6fd")
-check_box_2.deselect()
-
-print("checkbox 2 created")
 
 root.bind("<Return>", Ximia.search) # Bind ENTER key to search function
 
@@ -109,7 +93,7 @@ print("Enter key bind implemented")
 
 search_button = tk.Button(root, text="Find your molecule", command=Ximia.search) #Create search button
 search_button.config(fg="black", font=("Galaxy BT", 24)) # Button style and size
-search_button.grid(row=1, column=1, columnspan=3, padx=10, pady=10) #Create search button
+search_button.grid(row=1, column=0, columnspan=3, padx=10, pady=10) #Create search button
 
 print("Search button created")
 ximia = Ximia(master=root)
