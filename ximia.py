@@ -7,52 +7,59 @@ import pubchempy as pch
 import os
 
 
-
+# Class for the search function and button
 class Search(tk.Button):
-    def __init__(self,master=None,text=None):
+    def __init__(self,master=None,text=None):   
         tk.Button.__init__(self,master,text=text)
-        self['command'] = self.search
-
-        tk.Entry.__init__(self, width=60, justify='center')
-        
-
-
+        self['command'] = self.search       
 
     def search(self):
-        print("search made")
+        print("Im working")
+
 
 # Class for the main frame
-# It shows the app title
-# 
+# App title
+# Search box, field for writing the molecule to search for
+# Search button, initialized in Search() class
+#
 
 class Ximia(tk.Frame):
     def __init__(self,master=None):
+
+        # Creation and declaration of the initial frame
         tk.Frame.__init__(self,master)
+        self.config(bg="#b6d6fd")
 
-        self.labelHello = tk.Label(self,text="Ximia app")
-        self.labelHello['fg'] = "red"
-        self.labelHello.grid()
+    
+        # App title, to be substituted by the software official logo
+        self.appTitle = tk.Label(self,text="Ximia app")
+        self.appTitle.config(fg="red", bg="#b6d6fd", font=("Galaxy BT", 24, "bold"))
+        self.appTitle.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
 
-        self.search_box = Search(self) 
+
+        # Search box creation and configuration
+        self.search_box = tk.Entry(width=60, justify='center')
         self.search_box.config(fg="black", font=("Galaxy BT", 24)) 
-        self.search_box.grid(row=0, column=0, columnspan=3, padx=10, pady=10) 
+        self.search_box.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
 
+               
+        #Search button creation
         self.search_button = Search(self,text="Find your molecule")
-        self.search_button.grid()
+        self.search_button.config(fg="black", font=("Galaxy BT", 24))
+        self.search_button.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
 
-
-# main function and main configurations
-# main window is NOT resizable
+# main loop function and main configurations
+# main window is NOT resizable (should it be?)
 # icon placement in top left corner
 # background set to light blue
 
 def main():
     root = tk.Tk()
     ximia = Ximia(master=root)
-    ximia.grid() #place ximia main window
-    root.resizable(width=0, height=0) #Window size and make it resizable in height
-    root.iconphoto(True, tk.PhotoImage(file='./icon.png')) # Top left icon
-    root.config(bg="#b6d6fd") #Background color
+    ximia.grid()
+    root.resizable(width=0, height=0) 
+    root.iconphoto(True, tk.PhotoImage(file='./icon.png')) 
+    root.config(bg="#b6d6fd") 
     root.mainloop()
 
 if __name__ == '__main__':
