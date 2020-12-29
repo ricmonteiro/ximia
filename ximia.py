@@ -6,7 +6,6 @@ from chemspipy import ChemSpider
 import pubchempy as pch
 import os
 
-
 # Class for the main frame
 # App title
 # Search box, field for writing the molecule to search for
@@ -26,7 +25,7 @@ class Ximia(tk.Frame):
 
         # App title, to be substituted by the software official logo
         self.appTitle = tk.Label(root, text="XIMIA")
-        self.appTitle.config(fg="red", bg="#b6d6fd", font=("Galaxy BT", 44, "bold"))
+        self.appTitle.config(fg="black", bg="#b6d6fd", font=("Galaxy BT", 44, "bold"))
         self.appTitle.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
 
         # Search box creation and configuration
@@ -38,15 +37,13 @@ class Ximia(tk.Frame):
         self.search_button = tk.Button(root,text="Find your molecule", command=self.on_button)
         self.search_button.config(fg="black", font=("Galaxy BT", 24))
         self.search_button.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
-
-        self.search_button.bind('<Return>', self.on_button)
+        self.search_button.bind('<Return>', self.on_button)       
         root.mainloop()
 
     def on_button(self):
         search_item = self.search_box.get()
         print(search_item)
         return search_item
-    
-
+        
 Ximia()
    
