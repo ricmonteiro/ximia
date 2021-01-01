@@ -25,13 +25,13 @@ class Ximia(tk.Frame):
 
         # App title, to be substituted by the software official logo
         self.appTitle = tk.Label(root, text="XIMIA")
-        self.appTitle.config(fg="black", bg="#b6d6fd", font=("Galaxy BT", 44, "bold"))
-        self.appTitle.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
+        self.appTitle.config(fg="black", bg="#b6d6fd", font=("Courier New", 54))
+        self.appTitle.grid(row=0, column=0, columnspan=3, padx=10)
 
         # Search box creation and configuration
         self.search_box = tk.Entry(root, width=60, justify='center')
         self.search_box.config(fg="black", font=("Galaxy BT", 24)) 
-        self.search_box.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
+        self.search_box.grid(row=1, column=0, columnspan=3, padx=10, pady=5)
     
         #Search button creation
         self.search_button = tk.Button(root,text="Find your molecule", command=self.on_button)
