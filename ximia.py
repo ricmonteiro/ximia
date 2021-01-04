@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from PIL import Image, ImageTk
 import json
 import requests
@@ -50,10 +51,12 @@ class Ximia(tk.Frame):
             api_key = os.environ.get("CHEMSPI_API_KEY")
             print(api_key)
         except:
-            self.error_chemspi_api
-    
-    def error_chemspi_api():
-        tk.messagebox.showerror("Title", "Message")
+            self.error_chemspi_api()
+
+
+    ### Error message when there is no API for RSC
+    def error_chemspi_api(self):
+        messagebox.showerror("Error", "There was an error getting your API key for RSC. Please provide API key in the preferences menu (from https://developer.rsc.org/apis) or perform search using only the PubChem API.")
 
 
 
