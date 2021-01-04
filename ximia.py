@@ -10,7 +10,7 @@ import os
 # Class for the main frame
 # App title
 # Search box, field for writing the molecule to search for
-# Search button, initialized in Search() class
+# Search button, initialized in Ximia() class
 
 class Ximia(tk.Frame):
     def __init__(self):
@@ -43,39 +43,70 @@ class Ximia(tk.Frame):
         root.mainloop()
 
 
-    ### CREATE SEARCH FUNCTION
+    ### CREATE SEARCH FUNCTION, ACTIVATED ON BUTTON PRESSING ###
     def on_button(self):
         search_item = self.search_box.get()
         print(search_item)
+
+        # try to get api key
         try:
             api_key = os.environ.get("CHEMSPI_API_KEY")
             print(api_key)
         except:
             self.error_chemspi_api()
 
+        # try to get results from chemspi
+        try:
+            for compound in cs.search(search_item):
+                compound_name = str(compound.common_name)
+        
+        except:
+            self.error_noresults_chemspi
+        
+        # try to get results from pubchem
+        try:    
+            result_pch = pch.get_cids(search_item, "name", record_type="3d")
+        
+        except:
+            print("no results from pubchem")
+  
+        self.search_results()
 
-    ### Error message when there is no API for RSC
+    def error_noresults_chemspi():
+                messagebox.showerror("Error", "No ChemSpi results")
+
+    ### ERROR MESSAGES ###
+
     def error_chemspi_api(self):
         messagebox.showerror("Error", "There was an error getting your API key for RSC. Please provide API key in the preferences menu (from https://developer.rsc.org/apis) or perform search using only the PubChem API.")
 
 
 
+    ### CREATE RESULTS LIST FUNCTION ###
 
-    ### CREATE RESULTS LIST FUNCTION
-    def search_results():
-        # Search from ChemSpider API with ChemSpiPy wrapper
-              
+    def search_results(self6):
+
+        # Search from ChemSpider API with ChemSpiPy wrapper             
         cs = ChemSpider(api_key)
-        global compound_name
         try:
             for compound in cs.search(search_item):
                 compound_name = str(compound.common_name)
             print(compound_name)
         except:
-            print("Error...")
+            print("No resuls from the ChemSpider API")
+        
+
+        try:    
+            result_pch = pch.get_cids(search_item, "name", record_type="3d")
+            print(result_pch)                          
+            results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:20]
+            print(results_from_pubchem)
+        except:
+            print("No resuls from the PubChem API")
 
 
-        return search_item
-    
+
+
+#Initiate APP   
 Ximia()
    
