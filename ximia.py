@@ -74,7 +74,7 @@ class Ximia(tk.Frame):
         except:
             print("No resuls from the ChemSpider API")
         
-
+        # Search from PubChem API with PubChemPy wrapper
         try:    
             result_pch = pch.get_cids(search_item, "name", record_type="3d")
             print(result_pch)                          
@@ -87,7 +87,6 @@ class Ximia(tk.Frame):
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME
     def show_results(self):
         pass
-
 
 #Initiate APP   
 Ximia()
