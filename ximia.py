@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import ttk
 from PIL import Image, ImageTk
 import json
 import requests
@@ -93,27 +94,30 @@ class Ximia(tk.Frame):
         except:
             print("No resuls from the PubChem API")
             results_from_pubchem = []
-        self.show_results()
-
-        self.results = results_from_chemspi + results_from_pubchem
+        results = results_from_chemspi + results_from_pubchem
         self.show_results(results)
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
-    def show_results(self):
+    def show_results(self, results):
+
         # Configure result list widgets
         self.search_frame.config(bg="#b6d6fd")
         self.search_label.config(bg="#b6d6fd")
         self.sb_y.config(command=self.result_list.yview)
         self.result_list.config(yscrollcommand=self.sb_y.set) 
         
-        # Present search result widgets on frame
+        # Present search results widgets on frame
         self.search_frame.grid(row=3, column=0, padx=10, sticky='nsw')
         self.result_list.grid(row=4, column=0, pady=10, sticky='nsw')
-        self.result_list.insert(tk.END, self.results)
+        self.result_list.delete(0, tk.END)
+        self.result_list.insert(tk.END, *results)
         self.sb_y.grid(row=4, column=1, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
-
-
+        self.result_list.bind("<<ListboxSelect>>", self.show_selection_details)
+    
+    def show_selection_details(self,event):
+        selected_item = self.result_list.get(tk.ANCHOR)
+        print(selected_item)
 
 #Initiate App   
 Ximia()
