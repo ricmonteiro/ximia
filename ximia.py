@@ -42,7 +42,6 @@ class Ximia(tk.Frame):
 
         root.mainloop()
 
-
     ### CREATE SEARCH FUNCTION, ACTIVATED ON BUTTON PRESSING ###
     def on_button(self):
         search_item = self.search_box.get()
@@ -53,38 +52,18 @@ class Ximia(tk.Frame):
             api_key = os.environ.get("CHEMSPI_API_KEY")
             print(api_key)
         except:
+            # display error message if API key is not present
             self.error_chemspi_api()
 
-        # try to get results from chemspi
-        try:
-            for compound in cs.search(search_item):
-                compound_name = str(compound.common_name)
-        
-        except:
-            self.error_noresults_chemspi
-        
-        # try to get results from pubchem
-        try:    
-            result_pch = pch.get_cids(search_item, "name", record_type="3d")
-        
-        except:
-            print("no results from pubchem")
-  
-        self.search_results()
+        # call search_results function with API key
+        self.search_results(api_key, search_item)
 
-    def error_noresults_chemspi():
-                messagebox.showerror("Error", "No ChemSpi results")
-
-    ### ERROR MESSAGES ###
-
+    ### ERROR MESSAGE ###
     def error_chemspi_api(self):
         messagebox.showerror("Error", "There was an error getting your API key for RSC. Please provide API key in the preferences menu (from https://developer.rsc.org/apis) or perform search using only the PubChem API.")
 
-
-
-    ### CREATE RESULTS LIST FUNCTION ###
-
-    def search_results(self6):
+    ### FUNCTION TO CREATE RESULTS LIST ###
+    def search_results(self, api_key, search_item):
 
         # Search from ChemSpider API with ChemSpiPy wrapper             
         cs = ChemSpider(api_key)
@@ -103,8 +82,11 @@ class Ximia(tk.Frame):
             print(results_from_pubchem)
         except:
             print("No resuls from the PubChem API")
+        self.show_results()
 
-
+    ### FUNCTION TO SHOW RESULTS ON MAIN FRAME
+    def show_results(self):
+        pass
 
 
 #Initiate APP   
