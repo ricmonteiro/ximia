@@ -42,9 +42,9 @@ class Ximia(tk.Frame):
 
         # Search results frame and contents creation
         self.search_frame = tk.Frame(root)  
-        self.var = tk.StringVar()                                   
+        self.results = tk.StringVar()                                   
         self.sb_y = tk.Scrollbar(self.search_frame, orient="vertical")
-        self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=15, listvariable=self.var)
+        self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=15, listvariable=self.results)
         self.search_label = tk.Label(self.search_frame, text="Search results", font=("Helvetica", 18))  
 
         root.mainloop()
@@ -75,12 +75,13 @@ class Ximia(tk.Frame):
         # Search from ChemSpider API with ChemSpiPy wrapper             
         cs = ChemSpider(api_key)
         try:
-            for compound in cs.search(search_item):
-                compound_name = str(compound.common_name)
+            for num, compound in enumerate(cs.search(search_item)):
+                results_from_chemspi[num] = str(compound.common_name)
             print(compound_name)
 
         except:
             print("No resuls from the ChemSpider API")
+            results_from_chemspi = []
         
         # Search from PubChem API with PubChemPy wrapper
         try:    
@@ -91,19 +92,28 @@ class Ximia(tk.Frame):
 
         except:
             print("No resuls from the PubChem API")
+            results_from_pubchem = []
         self.show_results()
+
+        self.results = results_from_chemspi + results_from_pubchem
+        self.show_results(results)
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
     def show_results(self):
+        # Configure result list widgets
         self.search_frame.config(bg="#b6d6fd")
         self.search_label.config(bg="#b6d6fd")
-        self.result_list.config(yscrollcommand=self.sb_y.set) 
         self.sb_y.config(command=self.result_list.yview)
-
+        self.result_list.config(yscrollcommand=self.sb_y.set) 
+        
+        # Present search result widgets on frame
         self.search_frame.grid(row=3, column=0, padx=10, sticky='nsw')
-        self.result_list.grid(row=4, column=0, pady=10)
-        self.sb_y.grid(row=4, column=0, sticky='nse', pady=10) 
-        self.search_label.grid(row=3, column=0, pady=10)
+        self.result_list.grid(row=4, column=0, pady=10, sticky='nsw')
+        self.result_list.insert(tk.END, self.results)
+        self.sb_y.grid(row=4, column=1, sticky='ns', pady=10) 
+        self.search_label.grid(row=3, column=0, pady=5)
+
+
 
 #Initiate App   
 Ximia()
