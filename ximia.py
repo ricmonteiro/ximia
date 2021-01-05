@@ -34,11 +34,18 @@ class Ximia(tk.Frame):
         self.search_box.config(fg="black", font=("Galaxy BT", 24)) 
         self.search_box.grid(row=1, column=0, columnspan=3, padx=30, pady=5)
     
-        #Search button creation
+        # Search button creation
         self.search_button = tk.Button(root,text="Find your molecule", command=self.on_button)
         self.search_button.config(fg="black", font=("Galaxy BT", 24))
         self.search_button.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
-        self.search_button.bind('<Return>', self.on_button)  
+        self.search_button.bind('<Return>', self.on_button) 
+
+        # Search results frame and contents creation
+        self.search_frame = tk.Frame(root)  
+        self.var = tk.StringVar()                                   
+        self.sb_y = tk.Scrollbar(self.search_frame, orient="vertical")
+        self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=15, listvariable=self.var)
+        self.search_label = tk.Label(self.search_frame, text="Search results", font=("Helvetica", 18))  
 
         root.mainloop()
 
@@ -71,6 +78,7 @@ class Ximia(tk.Frame):
             for compound in cs.search(search_item):
                 compound_name = str(compound.common_name)
             print(compound_name)
+
         except:
             print("No resuls from the ChemSpider API")
         
@@ -80,14 +88,22 @@ class Ximia(tk.Frame):
             print(result_pch)                          
             results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:20]
             print(results_from_pubchem)
+
         except:
             print("No resuls from the PubChem API")
         self.show_results()
 
-    ### FUNCTION TO SHOW RESULTS ON MAIN FRAME
+    ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
     def show_results(self):
-        pass
+        self.search_frame.config(bg="#b6d6fd")
+        self.search_label.config(bg="#b6d6fd")
+        self.result_list.config(yscrollcommand=self.sb_y.set) 
+        self.sb_y.config(command=self.result_list.yview)
 
-#Initiate APP   
+        self.search_frame.grid(row=3, column=0, padx=10, sticky='nsw')
+        self.result_list.grid(row=4, column=0, pady=10)
+        self.sb_y.grid(row=4, column=0, sticky='nse', pady=10) 
+        self.search_label.grid(row=3, column=0, pady=10)
+
+#Initiate App   
 Ximia()
-   
