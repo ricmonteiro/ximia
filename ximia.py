@@ -7,6 +7,11 @@ import requests
 from chemspipy import ChemSpider
 import pubchempy as pch
 import os
+import logging
+
+
+logging.getLogger().setLevel(logging.DEBUG)
+
 
 # Class for the main frame
 # App title
@@ -94,7 +99,11 @@ class Ximia(tk.Frame):
         except:
             print("No resuls from the PubChem API")
             results_from_pubchem = []
+
         results = results_from_chemspi + results_from_pubchem
+        
+        
+        
         self.show_results(results)
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
@@ -104,7 +113,7 @@ class Ximia(tk.Frame):
         self.search_frame.config(bg="#b6d6fd")
         self.search_label.config(bg="#b6d6fd")
         self.sb_y.config(command=self.result_list.yview)
-        self.result_list.config(yscrollcommand=self.sb_y.set) 
+        self.result_list.config(relief=tk.FLAT, yscrollcommand=self.sb_y.set) 
         
         # Present search results widgets on frame
         self.search_frame.grid(row=3, column=0, padx=10, sticky='nsw')
@@ -113,11 +122,13 @@ class Ximia(tk.Frame):
         self.result_list.insert(tk.END, *results)
         self.sb_y.grid(row=4, column=1, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
+
+
         self.result_list.bind("<<ListboxSelect>>", self.show_selection_details)
     
     def show_selection_details(self,event):
         selected_item = self.result_list.get(tk.ANCHOR)
-        print(selected_item)
-
+        print(self.result_list.get(self.result_list.curselection()[0]))
+    
 #Initiate App   
 Ximia()
