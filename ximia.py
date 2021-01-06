@@ -9,9 +9,7 @@ import pubchempy as pch
 import os
 import logging
 
-
 logging.getLogger().setLevel(logging.DEBUG)
-
 
 # Class for the main frame
 # App title
@@ -59,7 +57,7 @@ class Ximia(tk.Frame):
 
     ### CREATE SEARCH FUNCTION, ACTIVATED ON BUTTON PRESSING ###
     def on_button(self):
-        search_item = self.search_box.get()
+        search_item = str(self.search_box.get())
         print(search_item)
 
         # try to get api key
@@ -81,12 +79,10 @@ class Ximia(tk.Frame):
     def search_results(self, api_key, search_item):
 
         # Search from ChemSpider API with ChemSpiPy wrapper             
-        cs = ChemSpider(api_key)
+        cs = ChemSpider(api_key)      
         try:
-            for num, compound in enumerate(cs.search(search_item)):
-                results_from_chemspi[num] = str(compound.common_name)
-                
-            print(compound_name)
+            for num, result in cs.search(search_item):
+                results_from_chemspi[num] = result             
 
         except:
             print("No resuls from the ChemSpider API")
@@ -95,7 +91,7 @@ class Ximia(tk.Frame):
         # Search from PubChem API with PubChemPy wrapper
         try:    
             result_pch = pch.get_cids(search_item, "name", record_type="3d")
-            print(result_pch)                          
+            print(result_pch)                      
             results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:20]
             print(results_from_pubchem)
 
