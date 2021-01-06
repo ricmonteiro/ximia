@@ -44,14 +44,16 @@ class Ximia(tk.Frame):
         self.search_button = tk.Button(root,text="Find your molecule", command=self.on_button)
         self.search_button.config(fg="black", font=("Galaxy BT", 24))
         self.search_button.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
-        self.search_button.bind('<Return>', self.on_button) 
-
+        
+        
         # Search results frame and contents creation
         self.search_frame = tk.Frame(root)  
         self.results = tk.StringVar()                                   
         self.sb_y = tk.Scrollbar(self.search_frame, orient="vertical")
-        self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=15, listvariable=self.results)
+        self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=12, listvariable=self.results)
         self.search_label = tk.Label(self.search_frame, text="Search results", font=("Helvetica", 18))  
+
+        self.bind("<Enter>", self.on_button) ### NOT WORKING...!
 
         root.mainloop()
 
@@ -83,6 +85,7 @@ class Ximia(tk.Frame):
         try:
             for num, compound in enumerate(cs.search(search_item)):
                 results_from_chemspi[num] = str(compound.common_name)
+                
             print(compound_name)
 
         except:
@@ -101,9 +104,7 @@ class Ximia(tk.Frame):
             results_from_pubchem = []
 
         results = results_from_chemspi + results_from_pubchem
-        
-        
-        
+
         self.show_results(results)
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
@@ -122,13 +123,13 @@ class Ximia(tk.Frame):
         self.result_list.insert(tk.END, *results)
         self.sb_y.grid(row=4, column=1, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
-
-
         self.result_list.bind("<<ListboxSelect>>", self.show_selection_details)
     
     def show_selection_details(self,event):
-        selected_item = self.result_list.get(tk.ANCHOR)
-        print(self.result_list.get(self.result_list.curselection()[0]))
-    
+
+        selected_item = self.result_list.get(self.result_list.curselection()[0])
+        print(selected_item)
+   
+
 #Initiate App   
 Ximia()
