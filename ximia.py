@@ -59,47 +59,24 @@ class Ximia(tk.Frame):
     def on_button(self):
         search_item = str(self.search_box.get())
         print(search_item)
+        self.search_results(search_item)
 
-        # try to get api key
-        try:
-            api_key = os.environ.get("CHEMSPI_API_KEY")
-            print(api_key)
-        except:
-            # display error message if API key is not present
-            self.error_chemspi_api()
-
-        # call search_results function with API key
-        self.search_results(api_key, search_item)
-
-    ### ERROR MESSAGE ###
-    def error_chemspi_api(self):
-        messagebox.showerror("Error", "There was an error getting your API key for RSC. Please provide API key in the preferences menu (from https://developer.rsc.org/apis) or perform search using only the PubChem API.")
-
+    
     ### FUNCTION TO CREATE RESULTS LIST ###
-    def search_results(self, api_key, search_item):
-
-        # Search from ChemSpider API with ChemSpiPy wrapper             
-        cs = ChemSpider(api_key)      
-        try:
-            for num, result in cs.search(search_item):
-                results_from_chemspi[num] = result             
-
-        except:
-            print("No resuls from the ChemSpider API")
-            results_from_chemspi = []
+    def search_results(self, search_item):
         
         # Search from PubChem API with PubChemPy wrapper
         try:    
             result_pch = pch.get_cids(search_item, "name", record_type="3d")
             print(result_pch)                      
-            results_from_pubchem = pch.Compound.from_cid(result_pch[0]).synonyms[0:20]
+            results_from_pubchem = pch.Compound.from_cid(result_pch).synonyms
             print(results_from_pubchem)
 
         except:
             print("No resuls from the PubChem API")
             results_from_pubchem = []
 
-        results = results_from_chemspi + results_from_pubchem
+        results = results_from_pubchem
 
         self.show_results(results)
 
@@ -122,9 +99,10 @@ class Ximia(tk.Frame):
         self.result_list.bind("<<ListboxSelect>>", self.show_selection_details)
     
     def show_selection_details(self,event):
-
         selected_item = self.result_list.get(self.result_list.curselection()[0])
+        selected_item
         print(selected_item)
+
    
 
 #Initiate App   
