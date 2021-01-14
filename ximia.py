@@ -43,7 +43,6 @@ class Ximia(tk.Frame):
         self.search_button.config(fg="black", font=("Galaxy BT", 24))
         self.search_button.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
         
-        
         # Search results frame and contents creation
         self.search_frame = tk.Frame(root)  
         self.results = tk.StringVar()                                   
@@ -67,18 +66,23 @@ class Ximia(tk.Frame):
         
         # Search from PubChem API with PubChemPy wrapper
         try:    
-            result_pch = pch.get_cids(search_item, "name", record_type="3d")
+            result_pch = pch.get_cids(search_item, 'name', list_return='flat')
             print(result_pch)                      
-            results_from_pubchem = pch.Compound.from_cid(result_pch).synonyms
+            results_from_pubchem = pch.Compound.from_cid(result_pch)
             print(results_from_pubchem)
+            
 
         except:
             print("No resuls from the PubChem API")
             results_from_pubchem = []
+            self.no_results()
 
-        results = results_from_pubchem
+        self.show_results(results_from_pubchem)
 
-        self.show_results(results)
+    ### FUNCTION THAT WARNS ABOUT NOT GETTING RESULTS ###
+    def no_results(self):
+        messagebox.showerror(title="No results", message="Your search yielded no results. Please search again with a different word.")
+
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
     def show_results(self, results):
@@ -102,8 +106,6 @@ class Ximia(tk.Frame):
         selected_item = self.result_list.get(self.result_list.curselection()[0])
         selected_item
         print(selected_item)
-
-   
 
 #Initiate App   
 Ximia()
