@@ -97,7 +97,7 @@ class Ximia(tk.Frame):
         self.search_frame.grid(row=3, column=0, padx=10, sticky='nsw')
         self.result_list.grid(row=4, column=0, pady=10, sticky='nsw')
         self.result_list.delete(0, tk.END)
-        self.result_list.insert(tk.END, *results)
+        self.result_list.insert(tk.END, results)
         self.sb_y.grid(row=4, column=1, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
         self.result_list.bind("<<ListboxSelect>>", self.show_selection_details)
