@@ -71,7 +71,6 @@ class Ximia(tk.Frame):
             results_from_pubchem = pch.Compound.from_cid(result_pch)
             print(results_from_pubchem)
             
-
         except:
             print("No resuls from the PubChem API")
             results_from_pubchem = []
