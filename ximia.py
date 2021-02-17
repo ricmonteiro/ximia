@@ -18,13 +18,8 @@ logging.getLogger().setLevel(logging.DEBUG)
 # Search button, initialized in Ximia() class
 
 class Ximia(tk.Frame):
-    def __init__(self):
-        root = tk.Tk()
-        root.title('XIMIA')
-        root.resizable(width=0, height=0) 
-        root.iconphoto(True, tk.PhotoImage(file='./icon.png')) 
-        root.config(bg="#b6d6fd")
-                   
+    def __init__(self, parent, *args, **kwargs):
+                           
         # Creation and declaration of the initial frame
         tk.Frame.__init__(self)
         self.config(bg="#b6d6fd")
@@ -51,10 +46,6 @@ class Ximia(tk.Frame):
         self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=12, listvariable=self.results)
         self.search_label = tk.Label(self.search_frame, text="Search results", font=("Helvetica", 18)) 
 
-
-
-
-        root.mainloop()
 
     ### CREATE SEARCH FUNCTION, ACTIVATED ON BUTTON PRESSING ###
     def on_button(self):
@@ -142,5 +133,11 @@ class Ximia(tk.Frame):
 
  
 #Initiate App   
-Ximia()
-
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title('XIMIA')
+    root.resizable(width=0, height=0) 
+    root.iconphoto(True, tk.PhotoImage(file='./icon.png')) 
+    root.config(bg="#b6d6fd")
+    Ximia(root)
+    root.mainloop()
