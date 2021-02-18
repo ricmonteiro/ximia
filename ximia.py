@@ -51,12 +51,12 @@ class Ximia(tk.Frame):
     ### FUNCTION TO CREATE RESULTS LIST ###
     def search_results(self, search_item):
         
-        # Search from PubChem API with PubChemPy wrapper
+        # Search from PubChem API with PubChemPy wrapper #
         try:    
             result_pch = pch.get_cids(search_item, 'name', 'substance', list_return='flat')                     
             global results_from_pubchem
             results_from_pubchem = [pch.Compound.from_cid(res) for res in result_pch]
-
+            
             # Error if there are no results
             if len(results_from_pubchem)==0:
                 self.no_results()
@@ -90,7 +90,8 @@ class Ximia(tk.Frame):
 
         # Print a synonym of the searched Compounds onto the results list
         for i in results:
-            self.result_list.insert(tk.END, i.synonyms[0])
+            print(i)
+            self.result_list.insert(tk.END, i.synonyms[0])                     
 
         # Mount scroll bar
         self.sb_y.grid(row=4, column=1, rowspan=10, sticky='ns', pady=10) 
@@ -111,12 +112,13 @@ class Ximia(tk.Frame):
         self.molecular_formula = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
         self.molecular_formula.grid(row=12, column=9, padx=10, pady=5)
         self.molecular_formula.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_formula))
+        self.molecular_formula.config(state=tk.DISABLED)
 
         self.molecular_weight = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
         self.molecular_weight.grid(row=13, column=9, padx=10, pady=5)
         self.molecular_weight.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_weight))
+        self.molecular_weight.config(state=tk.DISABLED)       
 
- 
 #Initiate App   
 if __name__ == "__main__":
     root = tk.Tk() 
