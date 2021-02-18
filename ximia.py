@@ -7,10 +7,6 @@ import requests
 from chemspipy import ChemSpider
 import pubchempy as pch
 import os
-import logging
-
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 # Class for the main frame
 # App title
@@ -50,7 +46,6 @@ class Ximia(tk.Frame):
     ### CREATE SEARCH FUNCTION, ACTIVATED ON BUTTON PRESSING ###
     def on_button(self):
         search_item = str(self.search_box.get())
-        print(search_item)
         self.search_results(search_item)
     
     ### FUNCTION TO CREATE RESULTS LIST ###
@@ -58,25 +53,20 @@ class Ximia(tk.Frame):
         
         # Search from PubChem API with PubChemPy wrapper
         try:    
-            result_pch = pch.get_cids(search_item, 'name', 'substance', list_return='flat')
-            print(result_pch)                      
+            result_pch = pch.get_cids(search_item, 'name', 'substance', list_return='flat')                     
             global results_from_pubchem
             results_from_pubchem = [pch.Compound.from_cid(res) for res in result_pch]
-            print(results_from_pubchem)
 
             # Error if there are no results
             if len(results_from_pubchem)==0:
-                print("No resuls from the PubChem API")
                 self.no_results()
             if len(results_from_pubchem)>0:
                 self.show_results(results_from_pubchem)
             
         except:
-            print("Error accessing the PubChem API")
             results_from_pubchem = []
             self.error()
-
-       
+      
     ### FUNCTION THAT WARNS ABOUT NOT GETTING RESULTS ###
     def no_results(self):
         messagebox.showerror(title="No results", message="Your search yielded no results. Please search again with a different word.")
@@ -107,12 +97,9 @@ class Ximia(tk.Frame):
         self.search_label.grid(row=3, column=0, pady=5)
         self.result_list.bind("<<ListboxSelect>>", self.show_result_details)
 
-
-
+    ### FUNCTION THAT SHOWS THE DETAILS ON THE CURRENT MOLECULE SELECTED SEARCH RESULTS LISTBOX ###
     def show_result_details(self, event):
-        print(self.result_list.get(self.result_list.curselection()[0]))
-        print(results_from_pubchem[self.result_list.curselection()[0]])
-
+        
         self.molecular_formula_label = tk.Label(self.search_frame, font=("Times New Roman", 20), text="Molecular formula: ")
         self.molecular_formula_label.config(bg="#b6d6fd")
         self.molecular_formula_label.grid(row=12, column=8, padx=10, pady=5)
@@ -122,22 +109,20 @@ class Ximia(tk.Frame):
         self.molecular_weight_label.grid(row=13, column=8, padx=10, pady=5)
 
         self.molecular_formula = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
-        self.molecular_formula.config(bg="#b6d6fd")
         self.molecular_formula.grid(row=12, column=9, padx=10, pady=5)
         self.molecular_formula.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_formula))
 
         self.molecular_weight = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
-        self.molecular_weight.config(bg="#b6d6fd")
         self.molecular_weight.grid(row=13, column=9, padx=10, pady=5)
         self.molecular_weight.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_weight))
 
  
 #Initiate App   
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.title('XIMIA')
-    root.resizable(width=0, height=0) 
-    root.iconphoto(True, tk.PhotoImage(file='./icon.png')) 
-    root.config(bg="#b6d6fd")
-    Ximia(root)
-    root.mainloop()
+    root = tk.Tk() 
+    root.title('XIMIA')                                                    # Title of the window
+    root.resizable(width=0, height=0)                                      # Don't allow resize of the window
+    root.iconphoto(True, tk.PhotoImage(file='./icon.png'))                 # Add awesome icon, I designed it myself
+    root.config(bg="#b6d6fd")                                              # Blue background
+    Ximia(root)                                                            # Open class
+    root.mainloop()                                                        # App loop 
