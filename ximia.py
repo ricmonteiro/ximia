@@ -18,6 +18,12 @@ class Ximia(tk.Frame):
         tk.Frame.__init__(self)
         self.config(bg="#b6d6fd")
 
+        # Creation of the images directory, where the images of the molecules will be displayed
+        try:
+            os.mkdir('./images') 
+        except:
+            pass
+
         # App title, to be substituted by the software official logo
         self.appTitle = tk.Label(root, text="XIMIA")
         self.appTitle.config(fg="black", bg="#b6d6fd", font=("Courier New", 54))
@@ -97,9 +103,10 @@ class Ximia(tk.Frame):
         for i in results:
             try:
                 self.result_list.insert(tk.END, i.synonyms[0]) 
-                          
+
             except:
-                pass     
+                pass    
+
         for i in results:
             temp_name = str(i.synonyms[0])
             temp_path = 'images/' + temp_name + '.png'
