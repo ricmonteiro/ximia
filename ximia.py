@@ -169,11 +169,7 @@ class Ximia(tk.Frame):
         compound_data = results_from_pubchem[self.result_list.curselection()[0]].to_series()
         path = './molecule_data/' + str(results_from_pubchem[self.result_list.curselection()[0]].synonyms[0]) + '.csv'
         compound_data.to_csv(path, header=False)
-        messagebox.showinfo(title="Data downloaded", message="Molecula data has been downloaded. Search in molecule_data folder")
-
-
-        
-
+        messagebox.showinfo(title="Data downloaded", message="Molecula data has been downloaded. Search in molecule_data folder")   
 
 #Initiate App   
 if __name__ == "__main__":
