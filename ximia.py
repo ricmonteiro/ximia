@@ -59,9 +59,9 @@ class Ximia(tk.Frame):
         try:    
             result_pch = pch.get_cids(search_item, 'name', 'substance', list_return='flat')                     
             global results_from_pubchem
-            #print(result_pch)
+            print(result_pch)
             results_from_pubchem = [pch.Compound.from_cid(res) for res in result_pch]
-            #print(results_from_pubchem)
+            print(results_from_pubchem)
             
 
             # Error if there are no results
@@ -74,8 +74,7 @@ class Ximia(tk.Frame):
             results_from_pubchem = []
             self.error()
             
-        prop_df = pch.compounds_to_frame(results_from_pubchem) 
-
+        #prop_df = pch.compounds_to_frame(results_from_pubchem) 
 
     ### FUNCTION THAT WARNS ABOUT NOT GETTING RESULTS ###
     def no_results(self):
@@ -83,7 +82,6 @@ class Ximia(tk.Frame):
 
     def error(self):
         messagebox.showerror(title="Error", message="Error accessing the PubChem API")
-
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
     def show_results(self, results):
@@ -102,20 +100,28 @@ class Ximia(tk.Frame):
         # Print a synonym of the searched Compounds onto the results list
         for i in results:
             try:
-                self.result_list.insert(tk.END, i.synonyms[0]) 
+                self.result_list.insert(tk.END, i.synonyms[0])
+                print(str(i) + "inserted") 
 
             except:
                 pass    
 
         for i in results:
-            temp_name = str(i.synonyms[0])
-            temp_path = 'images/' + temp_name + '.png'
-            c_img = pch.download('PNG', temp_path, temp_name, 'name', overwrite=True)           
-
+            try:
+                temp_name = str(i.synonyms[0])
+                print("temp name created")
+                temp_path = 'images/' + temp_name + '.png'
+                print("temp path created")
+                c_img = pch.download('PNG', temp_path, temp_name, 'name', overwrite=True)     
+                print("image for " + str(i) + "downloaded")      
+            except:
+                pass
+            
         # Mount scroll bar
         self.sb_y.grid(row=4, column=1, rowspan=10, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
         self.result_list.bind("<<ListboxSelect>>", self.show_result_details)
+        print("scroll bar mounted")
 
     ### FUNCTION THAT SHOWS THE DETAILS ON THE CURRENT MOLECULE SELECTED SEARCH RESULTS LISTBOX ###
     def show_result_details(self, event):
@@ -139,7 +145,7 @@ class Ximia(tk.Frame):
         # molecular formula text
         self.molecular_formula = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
         self.molecular_formula.grid(row=12, column=9, padx=10, pady=5)
-        self.molecular_formula.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_formula))
+        self.molecular_formula.insert(tk.END, results_from_pubchem[self.result_list.curselection()[0]].molecular_formula)
         self.molecular_formula.config(state=tk.DISABLED)
 
         # molecular weight label
@@ -151,7 +157,7 @@ class Ximia(tk.Frame):
         self.molecular_weight = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
         self.molecular_weight.grid(row=13, column=9, padx=10, pady=5)
         self.molecular_weight.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_weight))
-        self.molecular_weight.config(state=tk.DISABLED)       
+        self.molecular_weight.config(state=tk.DISABLED)              
 
 #Initiate App   
 if __name__ == "__main__":
