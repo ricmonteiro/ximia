@@ -11,6 +11,7 @@ import pandas as pd
 # Search box, field for writing the molecule to search for
 # Search button, initialized in Ximia() class
 
+
 class Ximia(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
                            
@@ -116,7 +117,8 @@ class Ximia(tk.Frame):
                 print("image for " + str(i) + "downloaded")      
             except:
                 pass
-            
+
+
         # Mount scroll bar
         self.sb_y.grid(row=4, column=1, rowspan=10, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
@@ -132,7 +134,7 @@ class Ximia(tk.Frame):
         self.img = ImageTk.PhotoImage(file=img_path)
 
         self.canvas = tk.Canvas(self.search_frame)
-        self.canvas.grid(row=4, column=8, columnspan=3)
+        self.canvas.grid(row=4, column=8, columnspan=3, sticky='nsw')
 
         self.img_label = tk.Label(self.canvas, image=self.img)
         self.img_label.pack()  
@@ -140,22 +142,22 @@ class Ximia(tk.Frame):
         # molecular formula label
         self.molecular_formula_label = tk.Label(self.search_frame, font=("Times New Roman", 20), text="Molecular formula: ")
         self.molecular_formula_label.config(bg="#b6d6fd")
-        self.molecular_formula_label.grid(row=12, column=8, padx=10, pady=5)
+        self.molecular_formula_label.grid(row=12, column=8, padx=10, pady=5, sticky='nsw')
 
         # molecular formula text
         self.molecular_formula = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
-        self.molecular_formula.grid(row=12, column=9, padx=10, pady=5)
+        self.molecular_formula.grid(row=12, column=9, padx=10, pady=5, sticky='nsw')
         self.molecular_formula.insert(tk.END, results_from_pubchem[self.result_list.curselection()[0]].molecular_formula)
         self.molecular_formula.config(state=tk.DISABLED)
 
         # molecular weight label
         self.molecular_weight_label = tk.Label(self.search_frame, font=("Times New Roman", 20), text="Molecular weight (g/mol): ")
         self.molecular_weight_label.config(bg="#b6d6fd")
-        self.molecular_weight_label.grid(row=13, column=8, padx=10, pady=5)
+        self.molecular_weight_label.grid(row=13, column=8, padx=10, pady=5, sticky='nsw')
 
         # molecular weight text
         self.molecular_weight = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
-        self.molecular_weight.grid(row=13, column=9, padx=10, pady=5)
+        self.molecular_weight.grid(row=13, column=9, padx=10, pady=5, sticky='nsw')
         self.molecular_weight.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_weight))
         self.molecular_weight.config(state=tk.DISABLED)              
 
