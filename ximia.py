@@ -11,7 +11,6 @@ import pandas as pd
 # Search box, field for writing the molecule to search for
 # Search button, initialized in Ximia() class
 
-
 class Ximia(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
                            
@@ -22,6 +21,7 @@ class Ximia(tk.Frame):
         # Creation of the images directory, where the images of the molecules will be displayed
         try:
             os.mkdir('./images') 
+            os.mkdir('./molecule_data')
         except:
             pass
 
@@ -47,7 +47,6 @@ class Ximia(tk.Frame):
         self.result_list = tk.Listbox(self.search_frame, font=("Times New Roman", 20), height=12, listvariable=self.results)
         self.search_label = tk.Label(self.search_frame, text="Search results", font=("Helvetica", 18)) 
 
-
     ### CREATE SEARCH FUNCTION, ACTIVATED ON BUTTON PRESSING ###
     def on_button(self):
         search_item = str(self.search_box.get())
@@ -62,8 +61,7 @@ class Ximia(tk.Frame):
             global results_from_pubchem
             print(result_pch)
             results_from_pubchem = [pch.Compound.from_cid(res) for res in result_pch]
-            print(results_from_pubchem)
-            
+            print(results_from_pubchem)           
 
             # Error if there are no results
             if len(results_from_pubchem)==0:
@@ -75,14 +73,15 @@ class Ximia(tk.Frame):
             results_from_pubchem = []
             self.error()
             
-        #prop_df = pch.compounds_to_frame(results_from_pubchem) 
+        prop_df = pch.compounds_to_frame(results_from_pubchem) 
 
     ### FUNCTION THAT WARNS ABOUT NOT GETTING RESULTS ###
     def no_results(self):
         messagebox.showerror(title="No results", message="Your search yielded no results. Please search again with a different word.")
 
+    # Error to throw when there is a error either accessing the API or the further processing
     def error(self):
-        messagebox.showerror(title="Error", message="Error accessing the PubChem API")
+        messagebox.showerror(title="Error", message="Results were found but there was an error processing them")
 
     ### FUNCTION TO SHOW RESULTS ON MAIN FRAME ###
     def show_results(self, results):
@@ -98,7 +97,7 @@ class Ximia(tk.Frame):
         self.result_list.grid(row=4, column=0, rowspan=10, pady=10, sticky='nsw')
         self.result_list.delete(0, tk.END)    
  
-        # Print a synonym of the searched Compounds onto the results list
+        # Print a synonym of the searched compounds onto the results list
         for i in results:
             try:
                 self.result_list.insert(tk.END, i.synonyms[0])
@@ -118,7 +117,6 @@ class Ximia(tk.Frame):
             except:
                 pass
 
-
         # Mount scroll bar
         self.sb_y.grid(row=4, column=1, rowspan=10, sticky='ns', pady=10) 
         self.search_label.grid(row=3, column=0, pady=5)
@@ -134,7 +132,7 @@ class Ximia(tk.Frame):
         self.img = ImageTk.PhotoImage(file=img_path)
 
         self.canvas = tk.Canvas(self.search_frame)
-        self.canvas.grid(row=4, column=8, columnspan=3, sticky='nsw')
+        self.canvas.grid(row=4, column=9, columnspan=3, sticky='nsw')
 
         self.img_label = tk.Label(self.canvas, image=self.img)
         self.img_label.pack()  
@@ -159,7 +157,23 @@ class Ximia(tk.Frame):
         self.molecular_weight = tk.Text(self.search_frame, width=10, height=1, font=("Times New Roman", 20))
         self.molecular_weight.grid(row=13, column=9, padx=10, pady=5, sticky='nsw')
         self.molecular_weight.insert(tk.END, str(results_from_pubchem[self.result_list.curselection()[0]].molecular_weight))
-        self.molecular_weight.config(state=tk.DISABLED)              
+        self.molecular_weight.config(state=tk.DISABLED)  
+        
+        # Download molecule details button
+        self.search_button = tk.Button(self.search_frame ,text="Download molecule data", command=self.download_molecule_data)
+        self.search_button.config(fg="black", font=("Galaxy BT", 24))
+        self.search_button.grid(row=14, column=9, columnspan=3, padx=10, pady=10)
+
+    def download_molecule_data(self):
+
+        compound_data = results_from_pubchem[self.result_list.curselection()[0]].to_series()
+        path = './molecule_data/' + str(results_from_pubchem[self.result_list.curselection()[0]].synonyms[0]) + '.csv'
+        compound_data.to_csv(path, header=False)
+        messagebox.showinfo(title="Data downloaded", message="Molecula data has been downloaded. Search in molecule_data folder")
+
+
+        
+
 
 #Initiate App   
 if __name__ == "__main__":
